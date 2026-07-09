@@ -82,6 +82,8 @@ private:
 
 	void ApplyAppearance(NPCData* a_data);
 
+	static NPCAppearance* GetNPCAppearance_NoLock(RE::TESNPC* a_npc);
+
 	void dtor();
 
 	static inline std::recursive_mutex appearanceMapLock;

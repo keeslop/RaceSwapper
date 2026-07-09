@@ -185,38 +185,36 @@ NPCAppearance* NPCAppearance::GetOrCreateNPCAppearance(RE::TESNPC* a_npc) {
 	if (!IsNPCValid(a_npc)) {
 		return nullptr;
 	}
-	appearanceMapLock.lock();
-	if (appearanceMap.contains(a_npc->formID)) {
-		appearanceMapLock.unlock();
-		return appearanceMap.at(a_npc->formID);
-	}
+
+	std::lock_guard g(appearanceMapLock);
+
+	if(NPCAppearance *cached = GetNPCAppearance_NoLock(a_npc))
+		return cached;
 
 	// Template actors are based on a face NPC. Always use face NPC as original appearance to get configuration for
 	auto config = ConfigurationDatabase::GetSingleton()->GetConfigurationForNPC(faceNPC); 
 
 	if (config == nullptr) {
 		logger::debug("No appearance config for {:x} face NPC: {:x}", a_npc->formID, faceNPC->formID);
-		appearanceMapLock.unlock();
 		return nullptr;
 	}
 
 	logger::debug("NPC {:x} matched entry \"{}\" from file \"{}\"", a_npc->formID, config->entry, config->file);
 	logger::info("Creating new appearance for {:x}. Face NPC used for appearance: {:x}", a_npc->formID, faceNPC->formID);
 	NPCAppearance* appearance = new NPCAppearance(a_npc, config);
-	appearanceMap.insert(std::pair(a_npc->formID, appearance));
-	appearanceMapLock.unlock();
+	appearanceMap[a_npc->formID] = appearance;
 	return appearance;
+};
+
+NPCAppearance* NPCAppearance::GetNPCAppearance_NoLock(RE::TESNPC* a_npc) {
+	auto it = appearanceMap.find(a_npc->formID);
+	return it != appearanceMap.end() ? it->second : nullptr;
 };
 
 // Templated actors rely on the face NPC for swaps, so our appearance data will be based on the faceNPC as well
 NPCAppearance* NPCAppearance::GetNPCAppearance(RE::TESNPC* a_npc) {
-	appearanceMapLock.lock();
-	if (appearanceMap.contains(a_npc->formID)) {
-		appearanceMapLock.unlock();
-		return appearanceMap.at(a_npc->formID);
-	}
-	appearanceMapLock.unlock();
-	return nullptr;
+	std::lock_guard g(appearanceMapLock);
+	return GetNPCAppearance_NoLock(a_npc);
 };
 
 void NPCAppearance::EraseNPCAppearance(RE::TESNPC* a_npc) {
@@ -225,15 +223,15 @@ void NPCAppearance::EraseNPCAppearance(RE::TESNPC* a_npc) {
 
 void NPCAppearance::EraseNPCAppearance(RE::FormID a_formID)
 {
-	appearanceMapLock.lock();
-	if (appearanceMap.contains(a_formID)) {
-		auto appearance = appearanceMap.at(a_formID);
-		appearanceMap.erase(a_formID);
+	std::lock_guard g(appearanceMapLock);
+	auto it = appearanceMap.find(a_formID);
+	if(it != appearanceMap.end())
+	{
+		auto appearance = it->second;
+		appearanceMap.erase(it);
 		appearance->dtor();
 		delete appearance;
-		
 	}
-	appearanceMapLock.unlock();
 };
 
 // Native Papyrus function version of enable
