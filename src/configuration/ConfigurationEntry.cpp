@@ -307,8 +307,8 @@ bool ConfigurationEntry::MatchesNPC(RE::TESNPC* a_npc) {
 	if (isMatch) {
 		// TODO: Hash should include the entry itself to prevent all entries with the same weight
 		// matching the same exact NPCs
-		srand((int) utils::HashForm(a_npc));
-		isMatch = ((std::uint32_t) rand() % 100) < entryData.probability;
+		auto seed = utils::HashForm(a_npc);
+		isMatch = (seed % 100) < entryData.probability;
 	}
 
 	return isMatch;

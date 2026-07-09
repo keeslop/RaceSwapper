@@ -61,11 +61,16 @@ namespace raceutils
 	class RandomGen
 	{
 	public:
-		RandomGen(RE::TESForm* a_item_seed) :
-			form_seed(a_item_seed)
+		RandomGen(RE::TESForm* a_item_seed)
+			: _hash_seed(utils::HashForm(a_item_seed))
 		{
-			_hash_seed = utils::HashForm(form_seed);
-			_random_num = _hash_seed;
+			_random_num = _Advance(_hash_seed);
+		}
+
+		RandomGen(const RandomGen& other, size_t mixin)
+			: _hash_seed(other._random_num ^ mixin)
+		{
+			_random_num = _Advance(_hash_seed);
 		}
 
 		inline const size_t GetHashSeed() const {
@@ -74,19 +79,28 @@ namespace raceutils
 
 		//@brief Get the Nth random number generated from the hash seed.
 		size_t GetStableRandom(std::uint32_t n_th_random = 1){
-			_random_num = _hash_seed;
+			uint64_t s = _Advance(_hash_seed);
+
 			for (std::uint32_t i = 0; i < n_th_random; i++) {
-				GetNext();
+				s = _Advance(s);
 			}
-			return _random_num;
+			return _Extract(s);
 		}
 
 		//@brief Get the next random number generated from the previous random number.
 		size_t GetNext(){
-			srand((int) _random_num);
-			_random_num = rand();
-			srand(clock());
-			return _random_num;
+			_random_num = _Advance(_random_num);
+			return _Extract(_random_num);
+		}
+
+		static inline uint64_t _Advance(uint64_t x)
+		{
+			return x * 0xf9b25d65ul + 0xFD; // via SDL3
+		}
+
+		static inline uint32_t _Extract(uint64_t x)
+		{
+			return (uint32_t)(x >> 32u);
 		}
 
 		//@brief Get the Nth random number generated from the hash seed.
@@ -97,8 +111,7 @@ namespace raceutils
 	private:
 		RandomGen();
 
-		RE::TESForm* form_seed;
-		size_t _hash_seed;
-		size_t _random_num;
+		const size_t _hash_seed;
+		uint64_t _random_num;
 	};
 }

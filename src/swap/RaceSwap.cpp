@@ -18,11 +18,14 @@ void RaceSwap::applySwap(NPCAppearance::NPCData* a_data, RE::TESRace* a_otherRac
 		return;
 	}
 
-	logger::info("Swapping {} {:x} to {} {:x}", 
+	raceutils::RandomGen rand_generator(a_data->baseNPC);
+
+	logger::info("Swapping {} {:x} to {} {:x} using seed {:x}", 
 		utils::GetFormEditorID(a_data->baseNPC).c_str(),
 		a_data->baseNPC->formID, 
 		utils::GetFormEditorID(a_otherRace),
-		a_otherRace->formID
+		a_otherRace->formID,
+		rand_generator.GetHashSeed()
 	);
 
 	auto originalRace = a_data->race;
@@ -35,12 +38,10 @@ void RaceSwap::applySwap(NPCAppearance::NPCData* a_data, RE::TESRace* a_otherRac
 	a_data->bodyTextureModel = &a_otherRace->bodyTextureModels[a_data->sex];
 	a_data->behaviorGraph = &a_otherRace->behaviorGraphs[a_data->sex];
 
-	raceutils::RandomGen rand_generator(a_data->baseNPC);	
-
 	DoHeadData(rand_generator, a_data);
-	DoHeadParts(rand_generator, a_data);
-	DoTints(rand_generator, a_data, originalRace);
-	DoHeadMorphs(rand_generator, a_data);
+	DoHeadParts(raceutils::RandomGen(rand_generator, 0x1b792e7a), a_data);
+	DoTints(raceutils::RandomGen(rand_generator, 0x47c5a037), a_data, originalRace);
+	DoHeadMorphs(raceutils::RandomGen(rand_generator, 0x9f3da24), a_data);
 
 	return;
 }
@@ -142,10 +143,7 @@ bool RaceSwap::DoHeadMorphs(raceutils::RandomGen rand_gen, NPCAppearance::NPCDat
 		logger::info("  No presets available!");
 		return false;
 	}
-	auto newNPC = raceutils::random_pick(
-		*presetNPCs, 
-		(int) rand_gen.GetNext()
-	);
+	auto newNPC = raceutils::random_pick(*presetNPCs, rand_gen.GetNext());
 
 	auto morphs = newNPC->faceData->morphs;
 	auto parts = newNPC->faceData->parts;
@@ -285,7 +283,7 @@ bool RaceSwap::DoTints(raceutils::RandomGen rand_gen, NPCAppearance::NPCData* a_
 	return true;
 }
 
-RE::BGSHeadPart* RaceSwap::SwitchHeadPart(raceutils::RandomGen rand_gen, NPCAppearance::NPCData* a_data, RE::BGSHeadPart* a_part)
+RE::BGSHeadPart* RaceSwap::SwitchHeadPart(raceutils::RandomGen& rand_gen, NPCAppearance::NPCData* a_data, RE::BGSHeadPart* a_part)
 {
 	if (a_part == nullptr) {
 		return a_part;

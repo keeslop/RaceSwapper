@@ -47,8 +47,7 @@ ConfigurationEntry* PickRandomWeightedEntry(std::vector<std::pair<std::uint32_t,
 	}
 
 	auto seed = utils::HashForm(a_npc);
-	srand((int) seed);
-	auto index = std::upper_bound(weights.begin(), weights.end(), rand() % weights.back()) - weights.begin();
+	auto index = std::upper_bound(weights.begin(), weights.end(), seed % weights.back()) - weights.begin();
 	return a_entries[index].second;
 }
 
