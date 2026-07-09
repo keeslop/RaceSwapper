@@ -6,9 +6,18 @@
 #include "MergeMapperPluginAPI.h"
 #include "swap/RaceSwapDatabase.h"
 #include "Papyrus.h"
+#include "PluginAPI.h"
 
 void MessageInterface(SKSE::MessagingInterface::Message* msg) {
 	switch (msg->type) {
+		case SKSE::MessagingInterface::kPostLoad:
+		{
+			if (SKSE::GetMessagingInterface()->RegisterListener(nullptr, PluginApiMessageHandler))
+				logger::info("Successfully registered SKSE listener");
+			else
+				logger::info("Unable to register SKSE listener");
+			break;
+		}
 		case SKSE::MessagingInterface::kPostPostLoad:
 		{
 			logger::info("Dependencies check...");
@@ -73,7 +82,7 @@ void InitializeLog()
 extern "C" DLLEXPORT constinit auto SKSEPlugin_Version = []() {
 	SKSE::PluginVersionData v;
 	v.PluginVersion(Version::MAJOR);
-	v.PluginName("RaceSwapper");
+	v.PluginName(RaceSwapperPluginAPI::RaceSwapperPluginName);
 	v.AuthorName("Nightfallstorm and Hanotak");
 	v.UsesNoStructs();
 	v.UsesAddressLibrary();

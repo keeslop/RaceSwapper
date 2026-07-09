@@ -95,9 +95,11 @@ endif()
 
 # ---- Add source files ----
 
-file(GLOB_RECURSE headers CONFIGURE_DEPENDS "src/**.h")
+include_directories("api")
 
+file(GLOB_RECURSE headers CONFIGURE_DEPENDS "src/**.h")
 file(GLOB_RECURSE sources CONFIGURE_DEPENDS "src/**.cpp")
+file(GLOB_RECURSE apis CONFIGURE_DEPENDS "api/**.h" "api/**.cpp")
 
 source_group(
 	TREE
@@ -105,6 +107,7 @@ source_group(
 	FILES
 		${headers}
 		${sources}
+		${apis}
 )
 
 source_group(
@@ -121,6 +124,7 @@ add_library(
 	SHARED
 	${headers}
 	${sources}
+	${apis}
 	${CMAKE_CURRENT_BINARY_DIR}/include/Version.h
 	${CMAKE_CURRENT_BINARY_DIR}/version.rc
 	.clang-format
