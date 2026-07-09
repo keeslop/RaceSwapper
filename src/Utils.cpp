@@ -12,22 +12,31 @@ namespace utils
 			return std::string();
 		}
 
+		if(Settings::GetSingleton()->features.all(Settings::Features::kUseActorBase)) {
+			if(RE::Actor *actor = a_form_seed->As<RE::Actor>())
+				a_form_seed = actor->GetActorBase();
+
+			if(RE::TESNPC *npc = a_form_seed->As<RE::TESNPC>())
+				if(RE::TESNPC *root = npc->GetRootFaceNPC())
+					a_form_seed = root;
+		}
+
 		auto fileName = "DynamicForm";
 		if (!a_form_seed->IsDynamicForm()) {
 			fileName = a_form_seed->GetFile()->fileName;
 		}
 
-		auto rawFormID = std::to_string(a_form_seed->GetFormID() & 0x00FFFFFF);
-		if (!a_form_seed->IsDynamicForm() && a_form_seed->GetFile()->IsLight()) {
-			rawFormID = std::to_string(a_form_seed->GetFormID() & 0x00000FFF);
-		}
+		RE::FormID id = a_form_seed->GetFormID() & 0x00FFFFFF;
+
+		if(!a_form_seed->IsDynamicForm() && a_form_seed->GetFile()->IsLight())
+			id &= 0x00000FFF;
 
 		std::string playthroughID = "";
 		if (Settings::GetSingleton()->features.any(Settings::Features::kPlaythroughRandomization)) {
 			playthroughID = std::to_string(RE::BGSSaveLoadManager::GetSingleton()->currentPlayerID);
 		}
 
-		return rawFormID + "_" + fileName + "_" + playthroughID;
+		return std::to_string(id) + "_" + fileName + "_" + playthroughID;
 	}
 
 	size_t HashForm(RE::TESForm* a_form_seed)
