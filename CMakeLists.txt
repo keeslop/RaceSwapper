@@ -12,7 +12,7 @@ endmacro()
 
 set_from_environment(VCPKG_ROOT)
 add_compile_definitions(SKYRIM)
-set(CommonLibPath "extern/CommonLibSSE-NG")
+set(CommonLibPath "${CMAKE_CURRENT_SOURCE_DIR}/extern/CommonLibSSE-NG")
 set(CommonLibName "CommonLibSSE")
 set(GameVersion "Skyrim")
 
@@ -84,12 +84,12 @@ set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>" CACHE STR
 
 # ---- Dependencies ----
 
-if (DEFINED CommonLibPath AND NOT ${CommonLibPath} STREQUAL "" AND IS_DIRECTORY ${CommonLibPath})
+if (DEFINED CommonLibPath AND NOT "${CommonLibPath}" STREQUAL "" AND IS_DIRECTORY ${CommonLibPath})
 	add_subdirectory(${CommonLibPath} ${CommonLibName} EXCLUDE_FROM_ALL)
 else ()
 	message(
 		FATAL_ERROR
-		"Variable ${CommonLibName}Path is not set."
+		"Variable ${CommonLibName} Path is not set: ${CommonLibPath}"
 	)
 endif()
 
