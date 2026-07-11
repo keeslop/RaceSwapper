@@ -61,6 +61,28 @@ static RE::SEX _GetActorSex(RE::Actor* a_actor)
 	return _GetNPCSex(a_actor->GetActorBase());
 }
 
+static RE::TESObjectARMO *_GetNPCSkin(RE::TESNPC *a_npc)
+{
+	if(!a_npc)
+		return nullptr;
+	auto appearance = NPCAppearance::GetNPCAppearance(a_npc);
+	return appearance && appearance->isNPCSwapped
+		? appearance->alteredNPCData.skin
+		: a_npc->skin;
+}
+
+
+static RE::TESObjectARMO *_GetActorSkin(RE::Actor *a_actor)
+{
+	if(!a_actor)
+		return nullptr;
+	RE::TESObjectARMO *skin = _GetNPCSkin(a_actor->GetActorBase());
+	if(!skin)
+		skin = a_actor->GetSkin();
+	return skin;
+}
+
+
 
 struct RaceSwapperInterface001 : public IRaceSwapperInterface001
 {
@@ -91,6 +113,14 @@ struct RaceSwapperInterface001 : public IRaceSwapperInterface001
 	RE::SEX GetAppearanceSexOfActor(RE::Actor* a_actor) override
 	{
 		return _GetActorSex(a_actor);
+	}
+	RE::TESObjectARMO *GetAppearanceSkinOfNPC(RE::TESNPC* a_npc) override
+	{
+		return _GetNPCSkin(a_npc);
+	}
+	RE::TESObjectARMO *GetAppearanceSkinOfActor(RE::Actor* a_actor) override
+	{
+		return _GetActorSkin(a_actor);
 	}
 };
 

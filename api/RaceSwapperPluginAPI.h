@@ -58,6 +58,12 @@ namespace RaceSwapperPluginAPI {
 
 		/// @return Whether an Actor's appearance was swapped
 		virtual bool IsActorSwapped(RE::Actor *a_actor) = 0;
+
+		/// @return Skin of NPC. If the NPC wasn't swapped, return original skin.
+		virtual RE::TESObjectARMO *GetAppearanceSkinOfNPC(RE::TESNPC* a_npc) = 0;
+
+		/// @return Skin of Actor. If the Actor wasn't swapped, return original skin.
+		virtual RE::TESObjectARMO *GetAppearanceSkinOfActor(RE::Actor* a_actor) = 0;
 	};
 
 	// Returns an IRaceSwapperInterface001 object compatible with the API above.
