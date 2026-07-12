@@ -6,7 +6,7 @@ namespace utils
 
 	std::string UniqueStringFromForm(RE::TESForm* a_form_seed);
 
-	size_t HashForm(RE::TESForm* a_form_seed);
+	size_t HashForm(const RE::TESForm* a_form_seed);
 
 	RE::BSTArray<RE::TESNPC::Layer*>* CopyTintLayers(RE::BSTArray<RE::TESNPC::Layer*>* a_tintLayers);
 
@@ -16,7 +16,7 @@ namespace utils
 
 	RE::TESNPC::FaceData* DeepCopyFaceData(RE::TESNPC::FaceData* a_faceData);
 
-	bool IsVampire(RE::TESNPC* a_npc);
+	bool IsVampire(const RE::TESNPC* a_npc);
 
 	RE::TESRace* AsNonVampireRace(RE::TESRace* a_race);
 

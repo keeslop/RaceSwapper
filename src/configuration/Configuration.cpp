@@ -32,7 +32,7 @@ void ConfigurationDatabase::Initialize() {
 	logger::info("Config APIs fully parsed!");
 }
 
-ConfigurationEntry* PickRandomWeightedEntry(std::vector<std::pair<std::uint32_t, ConfigurationEntry*>> a_entries, RE::TESNPC* a_npc)
+ConfigurationEntry* PickRandomWeightedEntry(std::vector<std::pair<std::uint32_t, ConfigurationEntry*>> a_entries, const RE::TESNPC* a_npc)
 {
 	if (a_entries.empty()) {
 		return nullptr;	
@@ -51,7 +51,7 @@ ConfigurationEntry* PickRandomWeightedEntry(std::vector<std::pair<std::uint32_t,
 	return a_entries[index].second;
 }
 
-AppearanceConfiguration* ConfigurationDatabase::GetConfigurationForNPC(RE::TESNPC* a_npc) {
+AppearanceConfiguration* ConfigurationDatabase::GetConfigurationForNPC(const RE::TESNPC* a_npc) {
 	std::vector<std::pair<std::uint32_t, ConfigurationEntry*>> matchedEntries;
 	for (auto entry : entries) {
 		if (entry->MatchesNPC(a_npc)) {

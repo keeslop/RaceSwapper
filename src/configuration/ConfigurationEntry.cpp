@@ -273,7 +273,7 @@ ConfigurationEntry* ConfigurationEntry::ConstructNewEntry(std::string a_line, st
 	return nullptr;	
 }
 
-bool ConfigurationEntry::MatchesNPC(RE::TESNPC* a_npc) {
+bool ConfigurationEntry::MatchesNPC(const RE::TESNPC* a_npc) {
 
 	auto nonVampireRace = utils::AsNonVampireRace(a_npc->race);
 

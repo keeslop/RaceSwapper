@@ -14,7 +14,7 @@ public:
 		std::uint32_t probability = 100; // 0-100
 
 		// Exclude Data
-		std::set<RE::TESNPC*> excludedNPCs;
+		std::set<const RE::TESNPC*> excludedNPCs;
 		std::set<RE::TESRace*> excludedRaces;
 		std::set<RE::TESFaction*> excludedFactions;
 		std::set<RE::SEX> excludedSexes;
@@ -32,7 +32,7 @@ public:
 
 	EntryData entryData;
 
-	bool MatchesNPC(RE::TESNPC* a_npc);
+	bool MatchesNPC(const RE::TESNPC* a_npc);
 
 	static ConfigurationEntry* ConstructNewEntry(std::string line, std::string a_file);
 };

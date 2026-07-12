@@ -6,18 +6,18 @@
 
 namespace utils
 {
-	std::string UniqueStringFromForm(RE::TESForm* a_form_seed)
+	std::string UniqueStringFromForm(const RE::TESForm* a_form_seed)
 	{
 		if (!a_form_seed) {
 			return std::string();
 		}
 
 		if(Settings::GetSingleton()->features.all(Settings::Features::kUseActorBase)) {
-			if(RE::Actor *actor = a_form_seed->As<RE::Actor>())
+			if(const RE::Actor *actor = a_form_seed->As<RE::Actor>())
 				a_form_seed = actor->GetActorBase();
 
-			if(RE::TESNPC *npc = a_form_seed->As<RE::TESNPC>())
-				if(RE::TESNPC *root = npc->GetRootFaceNPC())
+			if(const RE::TESNPC *npc = a_form_seed->As<RE::TESNPC>())
+				if(const RE::TESNPC *root = npc->GetRootFaceNPC())
 					a_form_seed = root;
 		}
 
@@ -39,7 +39,7 @@ namespace utils
 		return std::to_string(id) + "_" + fileName + "_" + playthroughID;
 	}
 
-	size_t HashForm(RE::TESForm* a_form_seed)
+	size_t HashForm(const RE::TESForm* a_form_seed)
 	{
 		std::string data = UniqueStringFromForm(a_form_seed);
 
@@ -201,7 +201,7 @@ namespace utils
 		return isValidRace ? a_race : GetValidRaceForArmorRecursive(a_armor, a_race->armorParentRace);
 	}
 
-	bool IsVampire(RE::TESNPC* a_npc)
+	bool IsVampire(const RE::TESNPC* a_npc)
 	{
 		auto currentRace = a_npc->race;
 		return currentRace->HasKeywordID(0xA82BB);  // Vampire keyword

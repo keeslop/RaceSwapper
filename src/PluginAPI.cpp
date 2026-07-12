@@ -10,7 +10,7 @@ static unsigned int _GetBuildNumber()
 	return plugin->GetVersion().pack();
 }
 
-static RE::TESRace *_GetNPCRace(RE::TESNPC* a_npc)
+static RE::TESRace *_GetNPCRace(const RE::TESNPC* a_npc)
 {
 	if(!a_npc)
 		return nullptr;
@@ -20,15 +20,15 @@ static RE::TESRace *_GetNPCRace(RE::TESNPC* a_npc)
 		: a_npc->race;
 }
 
-static RE::TESRace *_GetActorRace(RE::Actor* a_actor)
+static RE::TESRace *_GetActorRace(const RE::Actor* a_actor)
 {
 	if(!a_actor)
 		return nullptr;
-	RE::TESNPC *base = a_actor->GetActorBase();
+	const RE::TESNPC *base = a_actor->GetActorBase();
 	return base ? _GetNPCRace(base) : a_actor->GetRace();
 }
 
-static bool _IsNPCSwapped(RE::TESNPC* a_npc)
+static bool _IsNPCSwapped(const RE::TESNPC* a_npc)
 {
 	if(!a_npc)
 		return false;
@@ -36,15 +36,15 @@ static bool _IsNPCSwapped(RE::TESNPC* a_npc)
 	return appearance && appearance->isNPCSwapped;
 }
 
-static bool _IsActorSwapped(RE::Actor* a_actor)
+static bool _IsActorSwapped(const RE::Actor* a_actor)
 {
 	if(!a_actor)
 		return false;
-	RE::TESNPC *base = a_actor->GetActorBase();
+	const RE::TESNPC *base = a_actor->GetActorBase();
 	return _IsNPCSwapped(base);
 }
 
-static RE::SEX _GetNPCSex(RE::TESNPC *a_npc)
+static RE::SEX _GetNPCSex(const RE::TESNPC *a_npc)
 {
 	if(!a_npc)
 		return RE::SEX::kNone;
@@ -54,14 +54,14 @@ static RE::SEX _GetNPCSex(RE::TESNPC *a_npc)
 		: a_npc->GetSex();
 }
 
-static RE::SEX _GetActorSex(RE::Actor* a_actor)
+static RE::SEX _GetActorSex(const RE::Actor* a_actor)
 {
 	if(!a_actor)
 		return RE::SEX::kNone;
 	return _GetNPCSex(a_actor->GetActorBase());
 }
 
-static RE::TESObjectARMO *_GetNPCSkin(RE::TESNPC *a_npc)
+static RE::TESObjectARMO *_GetNPCSkin(const RE::TESNPC *a_npc)
 {
 	if(!a_npc)
 		return nullptr;
@@ -72,7 +72,7 @@ static RE::TESObjectARMO *_GetNPCSkin(RE::TESNPC *a_npc)
 }
 
 
-static RE::TESObjectARMO *_GetActorSkin(RE::Actor *a_actor)
+static RE::TESObjectARMO *_GetActorSkin(const RE::Actor *a_actor)
 {
 	if(!a_actor)
 		return nullptr;
@@ -90,35 +90,35 @@ struct RaceSwapperInterface001 : public IRaceSwapperInterface001
 	{
 		return _GetBuildNumber();
 	}
-	RE::TESRace* GetAppearanceRaceOfNPC(RE::TESNPC* a_npc) override
+	RE::TESRace* GetAppearanceRaceOfNPC(const RE::TESNPC* a_npc) override
 	{
 		return _GetNPCRace(a_npc);
 	}
-	RE::TESRace* GetAppearanceRaceOfActor(RE::Actor* a_actor) override
+	RE::TESRace* GetAppearanceRaceOfActor(const RE::Actor* a_actor) override
 	{
 		return _GetActorRace(a_actor);
 	}
-	bool IsNPCSwapped(RE::TESNPC* a_npc) override
+	bool IsNPCSwapped(const RE::TESNPC* a_npc) override
 	{
 		return _IsNPCSwapped(a_npc);
 	}
-	bool IsActorSwapped(RE::Actor* a_actor) override
+	bool IsActorSwapped(const RE::Actor* a_actor) override
 	{
 		return _IsActorSwapped(a_actor);
 	}
-	RE::SEX GetAppearanceSexOfNPC(RE::TESNPC* a_npc) override
+	RE::SEX GetAppearanceSexOfNPC(const RE::TESNPC* a_npc) override
 	{
 		return _GetNPCSex(a_npc);
 	}
-	RE::SEX GetAppearanceSexOfActor(RE::Actor* a_actor) override
+	RE::SEX GetAppearanceSexOfActor(const RE::Actor* a_actor) override
 	{
 		return _GetActorSex(a_actor);
 	}
-	RE::TESObjectARMO *GetAppearanceSkinOfNPC(RE::TESNPC* a_npc) override
+	RE::TESObjectARMO *GetAppearanceSkinOfNPC(const RE::TESNPC* a_npc) override
 	{
 		return _GetNPCSkin(a_npc);
 	}
-	RE::TESObjectARMO *GetAppearanceSkinOfActor(RE::Actor* a_actor) override
+	RE::TESObjectARMO *GetAppearanceSkinOfActor(const RE::Actor* a_actor) override
 	{
 		return _GetActorSkin(a_actor);
 	}

@@ -56,7 +56,7 @@ public:
 	// Load entries from the various entry files
 	void Initialize();
 
-	AppearanceConfiguration* GetConfigurationForNPC(RE::TESNPC* a_npc);
+	AppearanceConfiguration* GetConfigurationForNPC(const RE::TESNPC* a_npc);
 
 private:
 	std::vector<ConfigurationEntry*> entries;

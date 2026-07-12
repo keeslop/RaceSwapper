@@ -42,28 +42,28 @@ namespace RaceSwapperPluginAPI {
 		virtual unsigned int GetBuildNumber() = 0;
 
 		/// @return Race of NPC. If the NPC wasn't swapped, return original race.
-		virtual RE::TESRace* GetAppearanceRaceOfNPC(RE::TESNPC* a_npc) = 0;
+		virtual RE::TESRace* GetAppearanceRaceOfNPC(const RE::TESNPC* a_npc) = 0;
 
 		/// @return Race of Actor. If the Actor wasn't swapped, return original race.
-		virtual RE::TESRace* GetAppearanceRaceOfActor(RE::Actor* a_actor) = 0;
+		virtual RE::TESRace* GetAppearanceRaceOfActor(const RE::Actor* a_actor) = 0;
 
 		/// @return Sex of NPC. If the NPC wasn't swapped, return original sex.
-		virtual RE::SEX GetAppearanceSexOfNPC(RE::TESNPC* a_npc) = 0;
+		virtual RE::SEX GetAppearanceSexOfNPC(const RE::TESNPC* a_npc) = 0;
 
 		/// @return Sex of Actor. If the Actor wasn't swapped, return original sex.
-		virtual RE::SEX GetAppearanceSexOfActor(RE::Actor* a_actor) = 0;
+		virtual RE::SEX GetAppearanceSexOfActor(const RE::Actor* a_actor) = 0;
 
 		/// @return Whether a NPC's appearance was swapped
-		virtual bool IsNPCSwapped(RE::TESNPC *a_npc) = 0;
+		virtual bool IsNPCSwapped(const RE::TESNPC *a_npc) = 0;
 
 		/// @return Whether an Actor's appearance was swapped
-		virtual bool IsActorSwapped(RE::Actor *a_actor) = 0;
+		virtual bool IsActorSwapped(const RE::Actor *a_actor) = 0;
 
 		/// @return Skin of NPC. If the NPC wasn't swapped, return original skin.
-		virtual RE::TESObjectARMO *GetAppearanceSkinOfNPC(RE::TESNPC* a_npc) = 0;
+		virtual RE::TESObjectARMO *GetAppearanceSkinOfNPC(const RE::TESNPC* a_npc) = 0;
 
 		/// @return Skin of Actor. If the Actor wasn't swapped, return original skin.
-		virtual RE::TESObjectARMO *GetAppearanceSkinOfActor(RE::Actor* a_actor) = 0;
+		virtual RE::TESObjectARMO *GetAppearanceSkinOfActor(const RE::Actor* a_actor) = 0;
 	};
 
 	// Returns an IRaceSwapperInterface001 object compatible with the API above.

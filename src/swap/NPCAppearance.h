@@ -59,9 +59,9 @@ public:
 
 	static NPCAppearance* GetOrCreateNPCAppearance(RE::TESNPC* a_npc);
 
-	static NPCAppearance* GetNPCAppearance(RE::TESNPC* a_npc);
+	static NPCAppearance* GetNPCAppearance(const RE::TESNPC* a_npc);
 
-	static void EraseNPCAppearance(RE::TESNPC* a_npc);
+	static void EraseNPCAppearance(const RE::TESNPC* a_npc);
 
 	static void EraseNPCAppearance(RE::FormID a_formID);
 
@@ -82,7 +82,7 @@ private:
 
 	void ApplyAppearance(NPCData* a_data);
 
-	static NPCAppearance* GetNPCAppearance_NoLock(RE::TESNPC* a_npc);
+	static NPCAppearance* GetNPCAppearance_NoLock(const RE::TESNPC* a_npc);
 
 	void dtor();
 

@@ -7,7 +7,7 @@
 #include "SexSwap.h"
 #include "Utils.h"
 
-static void UpdateLoadedActors(RE::TESNPC* a_npc) {
+static void UpdateLoadedActors(const RE::TESNPC* a_npc) {
 	for (auto actorHandle : RE::ProcessLists::GetSingleton()->highActorHandles) {
 		RE::Actor* actor = actorHandle.get().get();
 		if (actor && actor->GetActorBase() == a_npc && actor->Is3DLoaded()) {
@@ -171,7 +171,7 @@ void NPCAppearance::dtor() {
 }
 
 // Filter for only NPCs this swapping can work on
-static bool IsNPCValid(RE::TESNPC* a_npc)
+static bool IsNPCValid(const RE::TESNPC* a_npc)
 {
 	return a_npc && a_npc->race &&
 	       !a_npc->IsPlayer() &&
@@ -206,18 +206,18 @@ NPCAppearance* NPCAppearance::GetOrCreateNPCAppearance(RE::TESNPC* a_npc) {
 	return appearance;
 };
 
-NPCAppearance* NPCAppearance::GetNPCAppearance_NoLock(RE::TESNPC* a_npc) {
+NPCAppearance* NPCAppearance::GetNPCAppearance_NoLock(const RE::TESNPC* a_npc) {
 	auto it = appearanceMap.find(a_npc->formID);
 	return it != appearanceMap.end() ? it->second : nullptr;
 };
 
 // Templated actors rely on the face NPC for swaps, so our appearance data will be based on the faceNPC as well
-NPCAppearance* NPCAppearance::GetNPCAppearance(RE::TESNPC* a_npc) {
+NPCAppearance* NPCAppearance::GetNPCAppearance(const RE::TESNPC* a_npc) {
 	std::lock_guard g(appearanceMapLock);
 	return GetNPCAppearance_NoLock(a_npc);
 };
 
-void NPCAppearance::EraseNPCAppearance(RE::TESNPC* a_npc) {
+void NPCAppearance::EraseNPCAppearance(const RE::TESNPC* a_npc) {
 	EraseNPCAppearance(a_npc->formID);
 };
 
